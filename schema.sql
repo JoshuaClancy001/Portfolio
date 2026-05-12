@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS "Projects" (
     "SortOrder"   INTEGER       NOT NULL DEFAULT 0,
     "RepoUrl"     TEXT,
     "LiveUrl"     TEXT,
+    "Summary"     TEXT,
     "CreatedAt"   TIMESTAMPTZ   NOT NULL DEFAULT NOW(),
     "UpdatedAt"   TIMESTAMPTZ   NOT NULL DEFAULT NOW()
 );
@@ -42,6 +43,15 @@ CREATE TABLE IF NOT EXISTS "Messages" (
     "Email"     TEXT        NOT NULL,
     "Body"      TEXT        NOT NULL,
     "IsRead"    BOOLEAN     NOT NULL DEFAULT FALSE,
+    "CreatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS "ProjectImages" (
+    "Id"        UUID        NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+    "ProjectId" UUID        NOT NULL REFERENCES "Projects" ("Id") ON DELETE CASCADE,
+    "Url"       TEXT        NOT NULL,
+    "AltText"   TEXT,
+    "SortOrder" INTEGER     NOT NULL DEFAULT 0,
     "CreatedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 

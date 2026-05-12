@@ -66,8 +66,10 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IChangelogService, ChangelogService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<IImageStorageService, SupabaseStorageService>();
 // Transient: auth is stateless, no shared state between calls.
 builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddHttpClient();
 
 // ── Background service ──────────────────────────────────────────────────────
 // Runs MigrateAsync + seeds the DB on startup. Uses IServiceScopeFactory to

@@ -12,6 +12,7 @@ public class AppDbContext : DbContext
     public DbSet<Tag> Tags => Set<Tag>();
     public DbSet<ProjectTag> ProjectTags => Set<ProjectTag>();
     public DbSet<Message> Messages => Set<Message>();
+    public DbSet<ProjectImage> ProjectImages => Set<ProjectImage>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -44,5 +45,11 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Tag>()
             .HasIndex(t => t.Name)
             .IsUnique();
+
+        modelBuilder.Entity<ProjectImage>()
+            .HasOne(i => i.Project)
+            .WithMany(p => p.Images)
+            .HasForeignKey(i => i.ProjectId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

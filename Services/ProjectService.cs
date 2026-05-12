@@ -33,6 +33,7 @@ public class ProjectService : IProjectService
             var project = await _db.Projects
                 .Include(p => p.ProjectTags).ThenInclude(pt => pt.Tag)
                 .Include(p => p.ChangelogEntries)
+                .Include(p => p.Images.OrderBy(i => i.SortOrder))
                 .FirstOrDefaultAsync(p => p.Id == id && (includeHidden || p.IsPublic));
             return project is null
                 ? Result<ProjectResponse>.Fail("Project not found.")
@@ -64,6 +65,7 @@ public class ProjectService : IProjectService
             Id = Guid.NewGuid(),
             Title = request.Title,
             Description = request.Description,
+            Summary = request.Summary,
             Status = status,
             IsPublic = request.IsPublic,
             SortOrder = request.SortOrder,
@@ -97,6 +99,7 @@ public class ProjectService : IProjectService
 
         project.Title = request.Title;
         project.Description = request.Description;
+        project.Summary = request.Summary;
         project.Status = status;
         project.IsPublic = request.IsPublic;
         project.SortOrder = request.SortOrder;
@@ -173,6 +176,46 @@ public class ProjectService : IProjectService
         return Result.Ok();
     }
 
+    public async Task<Result<ProjectImageResponse>> AddImageAsync(Guid projectId, string url, string? altText)
+    {
+        var nextOrder = await _db.ProjectImages
+            .Where(i => i.ProjectId == projectId)
+            .CountAsync();
+
+        var image = new ProjectImage
+        {
+            Id = Guid.NewGuid(),
+            ProjectId = projectId,
+            Url = url,
+            AltText = altText,
+            SortOrder = nextOrder,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        _db.ProjectImages.Add(image);
+        await _db.SaveChangesAsync();
+
+        return Result<ProjectImageResponse>.Ok(new ProjectImageResponse(image.Id, image.Url, image.AltText, image.SortOrder));
+    }
+
+    public async Task<Result<ProjectImage>> GetImageAsync(Guid imageId)
+    {
+        var image = await _db.ProjectImages.FindAsync(imageId);
+        return image is null
+            ? Result<ProjectImage>.Fail("Image not found.")
+            : Result<ProjectImage>.Ok(image);
+    }
+
+    public async Task<Result> DeleteImageAsync(Guid imageId)
+    {
+        var image = await _db.ProjectImages.FindAsync(imageId);
+        if (image is null) return Result.Fail("Image not found.");
+
+        _db.ProjectImages.Remove(image);
+        await _db.SaveChangesAsync();
+        return Result.Ok();
+    }
+
     private async Task AttachTagsAsync(Guid projectId, List<string> tagNames)
     {
         foreach (var name in tagNames)
@@ -194,6 +237,7 @@ public class ProjectService : IProjectService
     {
         var project = await _db.Projects
             .Include(p => p.ProjectTags).ThenInclude(pt => pt.Tag)
+            .Include(p => p.Images.OrderBy(i => i.SortOrder))
             .FirstAsync(p => p.Id == id);
         return MapToResponse(project);
     }
@@ -202,6 +246,7 @@ public class ProjectService : IProjectService
         p.Id,
         p.Title,
         p.Description,
+        p.Summary,
         p.Status.ToString(),
         p.IsPublic,
         p.SortOrder,
@@ -209,6 +254,7 @@ public class ProjectService : IProjectService
         p.LiveUrl,
         p.CreatedAt,
         p.UpdatedAt,
-        p.ProjectTags.Select(pt => pt.Tag.Name).ToList()
+        p.ProjectTags.Select(pt => pt.Tag.Name).ToList(),
+        p.Images.Select(i => new ProjectImageResponse(i.Id, i.Url, i.AltText, i.SortOrder)).ToList()
     );
 }

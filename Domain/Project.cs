@@ -10,9 +10,11 @@ public class Project
     public int SortOrder { get; set; }
     public string? RepoUrl { get; set; }
     public string? LiveUrl { get; set; }
+    public string? Summary { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
     public ICollection<ChangelogEntry> ChangelogEntries { get; set; } = [];
     public ICollection<ProjectTag> ProjectTags { get; set; } = [];
+    public ICollection<ProjectImage> Images { get; set; } = [];
 }

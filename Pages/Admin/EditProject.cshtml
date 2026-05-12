@@ -31,6 +31,51 @@
 </form>
 
 <section class="mt-16 max-w-2xl">
+    <h2 class="font-heading text-2xl mb-6">Screenshots</h2>
+    <form method="post" enctype="multipart/form-data" asp-page-handler="UploadImage" class="flex gap-3 mb-8 flex-wrap">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="ProjectId" />
+        <input type="file" name="file" accept="image/jpeg,image/png,image/webp,image/gif" required
+               class="flex-1 min-w-0 px-4 py-3 bg-secondary border border-border text-muted-foreground text-sm file:mr-4 file:py-1 file:px-3 file:border-0 file:bg-background file:text-muted-foreground file:text-xs" />
+        <input type="text" name="altText" placeholder="Alt text (optional)"
+               class="px-4 py-3 bg-secondary border border-border focus:border-accent outline-none transition-colors text-foreground text-sm w-48" />
+        <button type="submit"
+                class="px-5 py-3 border border-border text-muted-foreground hover:text-foreground hover:border-muted-foreground transition-colors text-sm whitespace-nowrap">
+            Upload
+        </button>
+    </form>
+    @if (Model.Images.Any())
+    {
+        <div class="grid grid-cols-2 gap-3 mb-8">
+            @foreach (var image in Model.Images)
+            {
+                <div class="relative group border border-border bg-secondary overflow-hidden">
+                    <img src="@image.Url" alt="@image.AltText" class="w-full h-40 object-cover" />
+                    <div class="absolute inset-0 bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <form method="post" asp-page-handler="DeleteImage">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" asp-for="ProjectId" />
+                            <input type="hidden" name="imageId" value="@image.Id" />
+                            <button type="submit" class="text-xs text-red-500 hover:opacity-70 transition-opacity px-3 py-1 border border-red-500">
+                                remove
+                            </button>
+                        </form>
+                    </div>
+                    @if (!string.IsNullOrEmpty(image.AltText))
+                    {
+                        <p class="text-xs text-muted-foreground px-3 py-2 truncate">@image.AltText</p>
+                    }
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-muted-foreground text-sm mb-8">No screenshots yet.</p>
+    }
+</section>
+
+<section class="mt-8 max-w-2xl">
     <h2 class="font-heading text-2xl mb-6">Changelog</h2>
     <form method="post" asp-page-handler="AddEntry" class="flex gap-3 mb-8">
         @Html.AntiForgeryToken()

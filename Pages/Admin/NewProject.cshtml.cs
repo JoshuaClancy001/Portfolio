@@ -25,7 +25,7 @@ public class NewProjectModel : PageModel
 
         var tags = Input.Tags?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
         var result = await _projectService.CreateAsync(new CreateProjectRequest(
-            Input.Title, Input.Description, Input.Status,
+            Input.Title, Input.Description, Input.Summary, Input.Status,
             Input.IsPublic, Input.SortOrder, Input.RepoUrl, Input.LiveUrl, tags
         ));
 

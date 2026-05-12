@@ -34,10 +34,10 @@
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="projects-grid">
             @foreach (var project in Model.Projects)
             {
-                <div data-status="@project.Status"
-                     class="p-6 bg-secondary border border-border hover:border-muted-foreground transition-colors flex flex-col">
+                <div data-status="@project.Status" onclick="window.location='/Projects/@project.Id'"
+                     class="p-6 bg-secondary border border-border hover:border-accent transition-colors flex flex-col cursor-pointer group">
                     <div class="flex items-start justify-between mb-3">
-                        <h3 class="font-heading flex-1">@project.Title</h3>
+                        <h3 class="font-heading flex-1 group-hover:text-accent transition-colors">@project.Title</h3>
                         <span class="text-xs px-2 py-1 ml-3 flex-shrink-0 text-background"
                               style="background-color: @StatusColor(project.Status)">
                             @labels.GetValueOrDefault(project.Status, project.Status)
@@ -52,7 +52,7 @@
                     </div>
                     @if (!string.IsNullOrEmpty(project.RepoUrl) || !string.IsNullOrEmpty(project.LiveUrl))
                     {
-                        <div class="flex gap-4 mt-4 pt-4 border-t border-border text-xs">
+                        <div class="flex gap-4 mt-4 pt-4 border-t border-border text-xs" onclick="event.stopPropagation()">
                             @if (!string.IsNullOrEmpty(project.RepoUrl))
                             {
                                 <a href="@project.RepoUrl" target="_blank" class="text-muted-foreground hover:text-accent transition-colors">repo →</a>

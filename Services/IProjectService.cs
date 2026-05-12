@@ -1,4 +1,5 @@
 using Portfolio.Common;
+using Portfolio.Domain;
 using Portfolio.DTOs;
 
 namespace Portfolio.Services;
@@ -14,4 +15,7 @@ public interface IProjectService
     Task<Result<ProjectResponse>> UpdateStatusAsync(Guid id, string status);
     Task<Result<ProjectResponse>> UpdateVisibilityAsync(Guid id, bool isPublic);
     Task<Result> ReorderAsync(List<Guid> orderedIds);
+    Task<Result<ProjectImageResponse>> AddImageAsync(Guid projectId, string url, string? altText);
+    Task<Result<ProjectImage>> GetImageAsync(Guid imageId);
+    Task<Result> DeleteImageAsync(Guid imageId);
 }

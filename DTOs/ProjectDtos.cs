@@ -1,9 +1,12 @@
 namespace Portfolio.DTOs;
 
+public record ProjectImageResponse(Guid Id, string Url, string? AltText, int SortOrder);
+
 public record ProjectResponse(
     Guid Id,
     string Title,
     string Description,
+    string? Summary,
     string Status,
     bool IsPublic,
     int SortOrder,
@@ -11,12 +14,14 @@ public record ProjectResponse(
     string? LiveUrl,
     DateTime CreatedAt,
     DateTime UpdatedAt,
-    List<string> Tags
+    List<string> Tags,
+    List<ProjectImageResponse> Images
 );
 
 public record CreateProjectRequest(
     string Title,
     string Description,
+    string? Summary,
     string Status,
     bool IsPublic,
     int SortOrder,
@@ -28,6 +33,7 @@ public record CreateProjectRequest(
 public record UpdateProjectRequest(
     string Title,
     string Description,
+    string? Summary,
     string Status,
     bool IsPublic,
     int SortOrder,
