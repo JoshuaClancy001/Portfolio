@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS "Projects" (
     "RepoUrl"     TEXT,
     "LiveUrl"     TEXT,
     "Summary"     TEXT,
+    "TargetDate"  TIMESTAMPTZ,
     "CreatedAt"   TIMESTAMPTZ   NOT NULL DEFAULT NOW(),
     "UpdatedAt"   TIMESTAMPTZ   NOT NULL DEFAULT NOW()
 );

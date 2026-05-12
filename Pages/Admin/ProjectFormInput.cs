@@ -12,5 +12,7 @@ public class ProjectFormInput
     public int SortOrder { get; set; } = 99;
     public string? RepoUrl { get; set; }
     public string? LiveUrl { get; set; }
+    public string? TargetDateString { get; set; }
+    public DateTime? TargetDate => DateTime.TryParse(TargetDateString, out var d) ? d.ToUniversalTime() : null;
     public string? Tags { get; set; }
 }

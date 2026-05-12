@@ -16,5 +16,6 @@ public record CreateChangelogEntryRequest(
 
 public record UpdateChangelogEntryRequest(
     string Content,
-    bool IsMilestone
+    bool IsMilestone,
+    DateTime? EntryDate
 );

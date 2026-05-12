@@ -66,9 +66,12 @@
                                     @labels.GetValueOrDefault(project.Status, project.Status)
                                 </span>
                             </div>
-                            <div class="ml-7 text-xs text-muted-foreground">
-                                @project.CreatedAt.ToString("MMMM d, yyyy")
-                            </div>
+                            @if (project.TargetDate.HasValue)
+                            {
+                                <div class="ml-7 text-xs text-muted-foreground">
+                                    @project.TargetDate.Value.ToString("MMMM d, yyyy")
+                                </div>
+                            }
                         </summary>
 
                         @if (!string.IsNullOrEmpty(project.Description))

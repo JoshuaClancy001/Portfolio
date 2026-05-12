@@ -57,6 +57,14 @@
 
 <div>
     <label class="block text-sm text-muted-foreground mb-2">
+        Date <span class="opacity-50">(shown on roadmap)</span>
+    </label>
+    <input asp-for="TargetDateString" type="date"
+           class="w-full px-4 py-3 bg-secondary border border-border focus:border-accent outline-none transition-colors text-foreground [color-scheme:dark]" />
+</div>
+
+<div>
+    <label class="block text-sm text-muted-foreground mb-2">
         Tags <span class="text-muted-foreground opacity-50">(comma-separated)</span>
     </label>
     <input asp-for="Tags" type="text" placeholder="ASP.NET Core, C#, PostgreSQL"

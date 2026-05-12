@@ -11,6 +11,7 @@ public class Project
     public string? RepoUrl { get; set; }
     public string? LiveUrl { get; set; }
     public string? Summary { get; set; }
+    public DateTime? TargetDate { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 

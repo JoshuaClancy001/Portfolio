@@ -43,6 +43,7 @@ else
                     <p class="text-muted-foreground text-xs truncate">@project.Description</p>
                 </div>
                 <div class="flex gap-6 shrink-0 text-sm">
+                    <a href="/Admin/EditProject/@project.Id#changelog" class="text-muted-foreground hover:text-foreground transition-opacity">changelog</a>
                     <a href="/Admin/EditProject/@project.Id" class="text-accent hover:opacity-70 transition-opacity">edit</a>
                     <form method="post" asp-page-handler="Delete"
                           onsubmit="return confirm('Delete @Html.Raw(System.Text.Json.JsonSerializer.Serialize(project.Title))?')">

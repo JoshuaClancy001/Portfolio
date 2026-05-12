@@ -12,6 +12,7 @@ public record ProjectResponse(
     int SortOrder,
     string? RepoUrl,
     string? LiveUrl,
+    DateTime? TargetDate,
     DateTime CreatedAt,
     DateTime UpdatedAt,
     List<string> Tags,
@@ -27,6 +28,7 @@ public record CreateProjectRequest(
     int SortOrder,
     string? RepoUrl,
     string? LiveUrl,
+    DateTime? TargetDate,
     List<string>? Tags
 );
 
@@ -39,6 +41,7 @@ public record UpdateProjectRequest(
     int SortOrder,
     string? RepoUrl,
     string? LiveUrl,
+    DateTime? TargetDate,
     List<string>? Tags
 );
 

@@ -17,7 +17,10 @@ public class NewProjectModel : PageModel
     [BindProperty] public ProjectFormInput Input { get; set; } = new();
     public string? ErrorMessage { get; set; }
 
-    public void OnGet() { }
+    public void OnGet()
+    {
+        Input.TargetDateString = DateTime.UtcNow.ToString("yyyy-MM-dd");
+    }
 
     public async Task<IActionResult> OnPostAsync()
     {
@@ -26,7 +29,7 @@ public class NewProjectModel : PageModel
         var tags = Input.Tags?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
         var result = await _projectService.CreateAsync(new CreateProjectRequest(
             Input.Title, Input.Description, Input.Summary, Input.Status,
-            Input.IsPublic, Input.SortOrder, Input.RepoUrl, Input.LiveUrl, tags
+            Input.IsPublic, Input.SortOrder, Input.RepoUrl, Input.LiveUrl, Input.TargetDate, tags
         ));
 
         if (!result.IsSuccess) { ErrorMessage = result.Error; return Page(); }

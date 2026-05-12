@@ -71,6 +71,7 @@ public class ProjectService : IProjectService
             SortOrder = request.SortOrder,
             RepoUrl = request.RepoUrl,
             LiveUrl = request.LiveUrl,
+            TargetDate = request.TargetDate,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
@@ -105,6 +106,7 @@ public class ProjectService : IProjectService
         project.SortOrder = request.SortOrder;
         project.RepoUrl = request.RepoUrl;
         project.LiveUrl = request.LiveUrl;
+        project.TargetDate = request.TargetDate;
         project.UpdatedAt = DateTime.UtcNow;
 
         _db.ProjectTags.RemoveRange(project.ProjectTags);
@@ -252,6 +254,7 @@ public class ProjectService : IProjectService
         p.SortOrder,
         p.RepoUrl,
         p.LiveUrl,
+        p.TargetDate,
         p.CreatedAt,
         p.UpdatedAt,
         p.ProjectTags.Select(pt => pt.Tag.Name).ToList(),

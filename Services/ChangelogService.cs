@@ -53,6 +53,8 @@ public class ChangelogService : IChangelogService
 
         entry.Content = request.Content;
         entry.IsMilestone = request.IsMilestone;
+        if (request.EntryDate.HasValue)
+            entry.CreatedAt = request.EntryDate.Value;
         entry.UpdatedAt = DateTime.UtcNow;
 
         await _db.SaveChangesAsync();

@@ -45,7 +45,8 @@ public class EditProjectModel : PageModel
             SortOrder = project.SortOrder,
             RepoUrl = project.RepoUrl,
             LiveUrl = project.LiveUrl,
-            Tags = string.Join(", ", project.Tags)
+            Tags = string.Join(", ", project.Tags),
+            TargetDateString = project.TargetDate.HasValue ? project.TargetDate.Value.ToString("yyyy-MM-dd") : null
         };
 
         Images = project.Images;
@@ -63,7 +64,7 @@ public class EditProjectModel : PageModel
         var tags = Input.Tags?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
         var result = await _projectService.UpdateAsync(ProjectId, new UpdateProjectRequest(
             Input.Title, Input.Description, Input.Summary, Input.Status,
-            Input.IsPublic, Input.SortOrder, Input.RepoUrl, Input.LiveUrl, tags
+            Input.IsPublic, Input.SortOrder, Input.RepoUrl, Input.LiveUrl, Input.TargetDate, tags
         ));
 
         if (!result.IsSuccess) { ErrorMessage = result.Error; return Page(); }
@@ -79,6 +80,13 @@ public class EditProjectModel : PageModel
     public async Task<IActionResult> OnPostDeleteEntryAsync(Guid entryId)
     {
         await _changelogService.DeleteEntryAsync(entryId);
+        return RedirectToPage(new { id = ProjectId });
+    }
+
+    public async Task<IActionResult> OnPostUpdateEntryAsync(Guid entryId, string content, bool isMilestone, string? entryDate)
+    {
+        DateTime? parsedDate = DateTime.TryParse(entryDate, out var d) ? d.ToUniversalTime() : null;
+        await _changelogService.UpdateEntryAsync(entryId, new UpdateChangelogEntryRequest(content, isMilestone, parsedDate));
         return RedirectToPage(new { id = ProjectId });
     }
 
