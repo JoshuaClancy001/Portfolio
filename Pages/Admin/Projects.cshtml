@@ -1,0 +1,68 @@
+@page
+@model Portfolio.Pages.Admin.ProjectsModel
+@{
+    ViewData["Title"] = "Projects";
+    Layout = "_AdminLayout";
+    var labels = new Dictionary<string, string> {
+        ["Planned"] = "Planned", ["InProgress"] = "In Progress",
+        ["Shipped"] = "Shipped", ["Paused"] = "Paused"
+    };
+}
+
+<div class="flex items-center justify-between mb-12">
+    <h1 class="font-heading text-4xl">Projects</h1>
+    <a href="/Admin/NewProject"
+       class="px-6 py-3 bg-accent text-background hover:opacity-90 transition-opacity text-sm">
+        + new project
+    </a>
+</div>
+
+@if (!Model.Projects.Any())
+{
+    <p class="text-muted-foreground">No projects yet.</p>
+}
+else
+{
+    <div class="space-y-2">
+        @foreach (var project in Model.Projects)
+        {
+            <div class="border border-border p-4 flex items-center gap-4 hover:border-muted-foreground transition-colors">
+                <div class="text-muted-foreground text-sm w-6 text-center shrink-0">@project.SortOrder</div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-3 mb-0.5 flex-wrap">
+                        <span class="text-foreground">@project.Title</span>
+                        <span class="text-xs px-2 py-0.5 text-background"
+                              style="background-color: @StatusColor(project.Status)">
+                            @labels.GetValueOrDefault(project.Status, project.Status)
+                        </span>
+                        @if (!project.IsPublic)
+                        {
+                            <span class="text-xs px-2 py-0.5 border border-border text-muted-foreground">hidden</span>
+                        }
+                    </div>
+                    <p class="text-muted-foreground text-xs truncate">@project.Description</p>
+                </div>
+                <div class="flex gap-6 shrink-0 text-sm">
+                    <a href="/Admin/EditProject/@project.Id" class="text-accent hover:opacity-70 transition-opacity">edit</a>
+                    <form method="post" asp-page-handler="Delete"
+                          onsubmit="return confirm('Delete @Html.Raw(System.Text.Json.JsonSerializer.Serialize(project.Title))?')">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@project.Id" />
+                        <button type="submit" class="text-red-500 hover:opacity-70 transition-opacity">delete</button>
+                    </form>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@functions {
+    string StatusColor(string status) => status switch
+    {
+        "InProgress" => "var(--status-inprogress)",
+        "Shipped"    => "var(--status-shipped)",
+        "Planned"    => "var(--status-planned)",
+        "Paused"     => "var(--status-paused)",
+        _            => "var(--status-planned)"
+    };
+}

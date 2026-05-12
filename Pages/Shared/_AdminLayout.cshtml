@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin — @ViewData["Title"]</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#1a1a1a',
+                        foreground: '#f5f5f0',
+                        secondary: '#2a2a2a',
+                        border: '#2a2a2a',
+                        'muted-foreground': '#a0a0a0',
+                        accent: '#ff6b35',
+                    },
+                    fontFamily: {
+                        heading: ['Fraunces', 'serif'],
+                        body: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen flex flex-col bg-background text-foreground">
+    <nav class="border-b border-border">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 py-6 flex items-center justify-between">
+            <div class="flex items-center gap-10">
+                <span class="font-heading text-lg text-accent">admin</span>
+                <a href="/Admin" class="text-sm text-muted-foreground hover:text-foreground transition-colors">dashboard</a>
+                <a href="/Admin/Projects" class="text-sm text-muted-foreground hover:text-foreground transition-colors">projects</a>
+                <a href="/Admin/Messages" class="text-sm text-muted-foreground hover:text-foreground transition-colors">messages</a>
+            </div>
+            <form method="post" action="/Admin/Logout">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="text-sm text-muted-foreground hover:text-foreground transition-colors">logout</button>
+            </form>
+        </div>
+    </nav>
+    <main class="flex-1 max-w-7xl mx-auto w-full px-6 md:px-12 py-12">
+        @RenderBody()
+    </main>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

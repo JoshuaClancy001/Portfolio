@@ -1,0 +1,45 @@
+@page
+@model Portfolio.Pages.Admin.MessagesModel
+@{
+    ViewData["Title"] = "Messages";
+    Layout = "_AdminLayout";
+}
+
+<h1 class="font-heading text-4xl mb-12">Messages</h1>
+
+@if (!Model.Messages.Any())
+{
+    <p class="text-muted-foreground">No messages yet.</p>
+}
+else
+{
+    <div class="space-y-3">
+        @foreach (var message in Model.Messages)
+        {
+            <div class="border @(message.IsRead ? "border-border" : "border-accent") p-6 bg-secondary">
+                <div class="flex items-start justify-between mb-3 gap-4">
+                    <div>
+                        <span class="text-foreground">@message.Name</span>
+                        <span class="text-muted-foreground text-sm ml-3">@message.Email</span>
+                    </div>
+                    <div class="flex items-center gap-4 shrink-0">
+                        <span class="text-xs text-muted-foreground">@message.CreatedAt.ToString("MMM d, yyyy")</span>
+                        @if (!message.IsRead)
+                        {
+                            <form method="post" asp-page-handler="MarkRead">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@message.Id" />
+                                <button type="submit" class="text-xs text-accent hover:opacity-70 transition-opacity">mark read</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="text-xs text-muted-foreground">read</span>
+                        }
+                    </div>
+                </div>
+                <p class="text-muted-foreground text-sm whitespace-pre-wrap">@message.Body</p>
+            </div>
+        }
+    </div>
+}
