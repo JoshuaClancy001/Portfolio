@@ -1,9 +1,0 @@
-namespace Portfolio.Domain;
-
-public class Tag
-{
-    public Guid Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-
-    public ICollection<ProjectTag> ProjectTags { get; set; } = [];
-}

@@ -46,6 +46,20 @@ Thumbs.db
 
 # Secrets / environment
 *.env
+*.env.local
+*.env.*.local
 appsettings.*.json
 !appsettings.json
 secrets.json
+
+# Next.js
+.next/
+out/
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Vercel
+.vercel
